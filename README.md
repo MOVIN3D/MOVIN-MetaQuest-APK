@@ -137,12 +137,9 @@ Below the status label, the left/right hand tracking state is shown as **● L  
 
 To connect to a different PC, press the red **Disconnect** button at the bottom to return to the first screen.
 
-### Re-centering the UI panel
+### Panel position
 
-The panel is placed in front of you when the app launches. If you change posture or turn around and the panel drifts out of view:
-
-- **Manual** — Hold the **B button** (right controller) or **Y button** (left controller) for 0.3 seconds and the panel jumps back to in front of you.
-- **Automatic** — If the panel sits outside your forward view cone for more than 1.5 seconds, it re-centers itself.
+The panel is head-locked — it stays in front of you wherever you turn or move. Mocap usage takes the headset off and wears it around the neck, so there's no concern about the UI obstructing the user's view during the actual capture.
 
 ---
 
