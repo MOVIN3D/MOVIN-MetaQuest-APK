@@ -1,5 +1,7 @@
 # MOVIN Quest Companion APK
 
+**한국어** | [English](README.en.md)
+
 Meta Quest 헤드셋의 손 추적 데이터를 같은 Wi-Fi에 있는 PC의 MOVIN Studio로 보내주는 Quest 측 컴패니언 앱입니다. 정식 스토어 빌드가 아니라서 한 번은 PC에서 USB로 직접 설치해야 합니다.
 
 ---
@@ -21,7 +23,7 @@ Meta Quest 헤드셋의 손 추적 데이터를 같은 Wi-Fi에 있는 PC의 MOV
 
 ### APK 파일
 
-이 README와 같은 위치에 있는 `MovinQuestCompanion.apk` 를 사용해주세요. GitHub 웹에서 파일을 직접 다운로드하거나, 저장소를 clone 한 뒤 해당 경로의 파일을 그대로 쓰시면 됩니다.
+이 README와 같은 위치에 있는 `MOVINQuestCompanion.apk` 를 사용해주세요. GitHub 웹에서 파일을 직접 다운로드하거나, 저장소를 clone 한 뒤 해당 경로의 파일을 그대로 쓰시면 됩니다.
 
 ---
 
@@ -77,13 +79,13 @@ sudo pacman -S android-tools             # Arch
 APK 파일이 있는 폴더로 이동한 뒤:
 
 ```bash
-adb install MovinQuestCompanion.apk
+adb install MOVINQuestCompanion.apk
 ```
 
 기존 버전 위에 새 빌드를 덮어쓸 때 (데이터 보존):
 
 ```bash
-adb install -r MovinQuestCompanion.apk
+adb install -r MOVINQuestCompanion.apk
 ```
 
 ---
