@@ -2,6 +2,8 @@
 
 **English** | [한국어](README.ko.md)
 
+[![Latest release](https://img.shields.io/github/v/release/MOVIN3D/MOVIN-MetaQuest-APK)](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest)
+
 A Quest-side companion app that streams hand tracking data from a Meta Quest headset to MOVIN Studio running on a PC on the same Wi-Fi. This is not a Meta Store build, so it has to be installed once via USB from a PC.
 
 ---
@@ -23,7 +25,13 @@ You need a USB-C cable that supports data transfer (charge-only cables won't wor
 
 ### APK file
 
-Use the `MOVINQuestCompanion.apk` file located alongside this README. You can either download the file directly from GitHub web or clone the repository and use the file at the same path.
+Download `MOVINQuestCompanion.apk` from the [**Releases**](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest) page.
+
+This link always serves the newest release, so you can use it directly:
+
+```
+https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest/download/MOVINQuestCompanion.apk
+```
 
 ---
 
@@ -76,7 +84,7 @@ If you see `unauthorized`, you need to accept the allow-dialog again inside the 
 
 ## 4. Install the APK
 
-From the folder containing the APK file:
+From the folder you downloaded the APK into:
 
 ```bash
 adb install MOVINQuestCompanion.apk
