@@ -2,9 +2,11 @@
 
 **English** | [한국어](README.ko.md)
 
-[![Latest release](https://img.shields.io/github/v/release/MOVIN3D/MOVIN-MetaQuest-APK)](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest)
+[![Latest release](https://img.shields.io/github/v/release/MOVIN3D/MOVIN-MetaQuest-APK?display_name=tag&label=latest)](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest)
 
 A Quest-side companion app that streams hand tracking data from a Meta Quest headset to MOVIN Studio running on a PC on the same Wi-Fi. This is not a Meta Store build, so it has to be installed once via USB from a PC.
+
+> MOVIN Studio runs on **Windows and Linux**. The one-time APK install only needs a PC with `adb`, and it does not have to be the PC that runs Studio — installing from a Windows PC and then streaming to Studio on Linux works.
 
 ---
 
@@ -14,7 +16,7 @@ A Quest-side companion app that streams hand tracking data from a Meta Quest hea
 
 > Quest requires **Developer Mode** to be enabled in order to run apps installed from outside the Meta Store.
 
-1. Create a Meta developer account at https://developer.oculus.com (free, one-time organization registration required).
+1. Create a Meta developer account at https://developers.meta.com/horizon/ (free, one-time organization registration required).
 2. Install the **Meta Horizon app** on your phone and sign in.
 3. In the app: `Menu` → `Devices` → select your Quest → `Developer Mode` → **ON**.
 4. Reboot the Quest headset once.
@@ -25,13 +27,9 @@ You need a USB-C cable that supports data transfer (charge-only cables won't wor
 
 ### APK file
 
-Download `MOVINQuestCompanion.apk` from the [**Releases**](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest) page.
+**[⬇ Download MOVINQuestCompanion.apk](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest/download/MOVINQuestCompanion.apk)** — this link always serves the newest build.
 
-This link always serves the newest release, so you can use it directly:
-
-```
-https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest/download/MOVINQuestCompanion.apk
-```
+Older builds are listed on the [Releases](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases) page. The `Source code` archives you see there are attached automatically by GitHub and contain nothing but these README files, so the APK is the only file you need.
 
 ---
 
@@ -58,9 +56,25 @@ After installing, open a new PowerShell window and run `adb version` to verify.
 ### Linux
 
 ```bash
-sudo apt install android-tools-adb       # Ubuntu / Debian
+sudo apt install adb                     # Ubuntu / Debian
 sudo dnf install android-tools           # Fedora
 sudo pacman -S android-tools             # Arch
+```
+
+Linux also needs a udev rule before your user account can talk to the headset — without it `adb devices` lists the Quest as `no permissions`. On Ubuntu/Debian the packaged rules cover it:
+
+```bash
+sudo apt install android-sdk-platform-tools-common
+```
+
+On other distributions, add the rule by hand (`2833` is Meta's USB vendor ID) and make sure your user is in the `plugdev` group:
+
+```bash
+echo 'SUBSYSTEM=="usb", ATTR{idVendor}=="2833", MODE="0666", GROUP="plugdev"' \
+  | sudo tee /etc/udev/rules.d/51-android.rules
+sudo udevadm control --reload-rules && sudo udevadm trigger
+sudo usermod -aG plugdev $USER    # log out and back in for this to take effect
+adb kill-server
 ```
 
 ---
@@ -111,7 +125,7 @@ adb install -r MOVINQuestCompanion.apk
 
 ## 6. How to use the app
 
-The UI is **controller-only**. Hand tracking input is intentionally not used — that prevents the user's hands, which keep moving during mocap, from accidentally pressing UI elements. Once you've finished setting up the connection, you can put the controller down — that's when the mocap-side hand tracking activates.
+The UI is **controller-only**. Hand tracking input is intentionally not used — that keeps your hands, which move constantly during mocap, from accidentally pressing UI elements. Once you've finished setting up the connection, you can put the controller down — that's when the mocap-side hand tracking activates.
 
 ### Controller interaction
 
@@ -123,7 +137,7 @@ The UI is **controller-only**. Hand tracking input is intentionally not used —
 
 When the app launches, it scans the local Wi-Fi for any PC running MOVIN Studio.
 
-- **When a PC is found** — A `Found N hosts:` header appears at the top of the screen, followed by up to 5 buttons each showing the PC's name and `IP:port`. Aim the ray at the host you want and pull the trigger to start the connection.
+- **When a PC is found** — A `Found N hosts:` header appears at the top of the screen, followed by up to 5 buttons, each showing the PC's name and `IP:port`. Aim the ray at the host you want and pull the trigger to start the connection.
 - **When no PC is found** — Type the PC's IP (e.g. `192.168.1.100`) using the numpad in the middle (1–9 / 0 / `.` / `⌫`) and press the **Connect** button below.
 
 > The IP you enter is saved automatically and shows up the next time you launch the app.
@@ -147,7 +161,7 @@ To connect to a different PC, press the red **Disconnect** button at the bottom 
 
 ### Panel position
 
-The panel is head-locked — it stays in front of you wherever you turn or move. Mocap usage takes the headset off and wears it around the neck, so there's no concern about the UI obstructing the user's view during the actual capture.
+The panel is head-locked — it stays in front of you wherever you turn or move. During mocap the headset is taken off and worn around the neck, so the panel following you around is never in the way of the actual capture.
 
 ---
 
@@ -178,7 +192,8 @@ For the full usage flow, see the GitBook guide — **MOVIN Studio Usage Guide �
 |---|---|
 | Empty list | Verify the cable supports data transfer / try a different USB port |
 | `unauthorized` | Accept the allow-dialog inside the Quest again (reconnect the cable to re-trigger it) |
-| (Windows) Yellow ! mark | Install the [Oculus ADB Driver](https://developer.oculus.com/downloads/package/oculus-adb-drivers/) |
+| (Windows) Yellow ! mark | Install the [Oculus ADB Driver](https://developers.meta.com/horizon/downloads/package/oculus-adb-drivers/) |
+| (Linux) `no permissions` | The udev rule is missing — see the Linux part of section 2, then re-plug the cable |
 
 ### Install errors (`INSTALL_FAILED_*`)
 

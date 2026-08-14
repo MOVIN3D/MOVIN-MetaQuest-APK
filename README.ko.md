@@ -2,9 +2,11 @@
 
 [English](README.md) | **한국어**
 
-[![Latest release](https://img.shields.io/github/v/release/MOVIN3D/MOVIN-MetaQuest-APK)](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest)
+[![Latest release](https://img.shields.io/github/v/release/MOVIN3D/MOVIN-MetaQuest-APK?display_name=tag&label=latest)](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest)
 
 Meta Quest 헤드셋의 손 추적 데이터를 같은 Wi-Fi에 있는 PC의 MOVIN Studio로 보내주는 Quest 측 컴패니언 앱입니다. 정식 스토어 빌드가 아니라서 한 번은 PC에서 USB로 직접 설치해야 합니다.
+
+> MOVIN Studio는 **Windows와 Linux**를 지원합니다. APK 설치에는 `adb` 가 설치된 PC만 필요하고, Studio를 실행하는 PC와 같은 PC가 아니어도 됩니다 — Windows PC에서 설치한 뒤 Linux의 Studio로 데이터를 보내는 것도 정상 동작합니다.
 
 ---
 
@@ -14,7 +16,7 @@ Meta Quest 헤드셋의 손 추적 데이터를 같은 Wi-Fi에 있는 PC의 MOV
 
 > Meta 스토어 외부에서 설치한 앱을 Quest에서 실행하려면 **개발자 모드(Developer Mode)** 를 켜야 합니다.
 
-1. https://developer.oculus.com 에서 Meta 개발자 계정 생성 (무료, 조직 등록 1회 필요).
+1. https://developers.meta.com/horizon/ 에서 Meta 개발자 계정 생성 (무료, 조직 등록 1회 필요).
 2. 모바일에 **Meta Horizon 앱**을 설치하고 로그인.
 3. 앱 → `메뉴` → `디바이스` → 사용 중인 Quest 선택 → `개발자 모드` → **ON**.
 4. Quest 헤드셋을 한 번 재부팅.
@@ -25,13 +27,9 @@ Meta Quest 헤드셋의 손 추적 데이터를 같은 Wi-Fi에 있는 PC의 MOV
 
 ### APK 파일
 
-[**Releases**](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest) 페이지에서 `MOVINQuestCompanion.apk` 를 다운로드해주세요.
+**[⬇ MOVINQuestCompanion.apk 다운로드](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest/download/MOVINQuestCompanion.apk)** — 이 링크는 항상 최신 빌드를 내려줍니다.
 
-아래 링크는 항상 최신 릴리스 파일로 연결되니 그대로 쓰셔도 됩니다.
-
-```
-https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases/latest/download/MOVINQuestCompanion.apk
-```
+이전 버전은 [Releases](https://github.com/MOVIN3D/MOVIN-MetaQuest-APK/releases) 페이지에 있습니다. 그 페이지의 `Source code` 압축 파일은 GitHub이 자동으로 붙이는 것으로 이 README 문서들만 들어있으니, 필요한 파일은 APK 하나입니다.
 
 ---
 
@@ -58,9 +56,25 @@ winget install --id=Google.PlatformTools -e
 ### Linux
 
 ```bash
-sudo apt install android-tools-adb       # Ubuntu / Debian
+sudo apt install adb                     # Ubuntu / Debian
 sudo dnf install android-tools           # Fedora
 sudo pacman -S android-tools             # Arch
+```
+
+Linux에서는 udev 규칙이 있어야 사용자 계정으로 헤드셋에 접근할 수 있습니다. 규칙이 없으면 `adb devices` 에서 Quest가 `no permissions` 로 표시됩니다. Ubuntu/Debian은 패키지로 해결됩니다.
+
+```bash
+sudo apt install android-sdk-platform-tools-common
+```
+
+다른 배포판에서는 규칙을 직접 추가하고 (`2833` 은 Meta의 USB 벤더 ID), 사용자를 `plugdev` 그룹에 넣어주세요.
+
+```bash
+echo 'SUBSYSTEM=="usb", ATTR{idVendor}=="2833", MODE="0666", GROUP="plugdev"' \
+  | sudo tee /etc/udev/rules.d/51-android.rules
+sudo udevadm control --reload-rules && sudo udevadm trigger
+sudo usermod -aG plugdev $USER    # 적용을 위해 로그아웃 후 재로그인
+adb kill-server
 ```
 
 ---
@@ -178,7 +192,8 @@ Connect 후에는 상태 화면으로 전환됩니다.
 |---|---|
 | 비어있음 | 케이블이 데이터 전송용인지 확인 / 다른 USB 포트 시도 |
 | `unauthorized` | Quest 안에서 허용 다이얼로그를 다시 받기 (케이블 재연결) |
-| (Windows) 노란 ! 마크 | [Oculus ADB Driver](https://developer.oculus.com/downloads/package/oculus-adb-drivers/) 설치 |
+| (Windows) 노란 ! 마크 | [Oculus ADB Driver](https://developers.meta.com/horizon/downloads/package/oculus-adb-drivers/) 설치 |
+| (Linux) `no permissions` | udev 규칙 누락 — 2장의 Linux 항목 참고 후 케이블 재연결 |
 
 ### 설치 실패 (`INSTALL_FAILED_*`)
 
